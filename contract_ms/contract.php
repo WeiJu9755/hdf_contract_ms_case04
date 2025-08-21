@@ -66,6 +66,48 @@ function confirm($auto_seq,$check,$memberID){
 	
 }
 
+
+$xajax->registerFunction("returnValue");
+function returnValue($auto_seq){
+	$objResponse = new xajaxResponse();
+	$earliest_entry_date = "";
+	$latest_completion_date = "";
+
+	$mDB = "";
+	$mDB = new MywebDB();
+	
+	$Qry="SELECT 
+			a.auto_seq,
+			MIN(b.actual_entry_date) AS earliest_entry_date,
+			MAX(b.actual_completion_date) AS latest_completion_date
+		FROM CaseManagement a
+		LEFT JOIN overview_building b 
+			ON b.case_id = a.case_id
+		WHERE a.auto_seq = '$auto_seq'
+		GROUP BY a.auto_seq;";
+	$mDB->query($Qry);
+	if ($mDB->rowCount() > 0) {
+		while ($row = $mDB->fetchRow(2)) {
+		$earliest_entry_date = ($row['earliest_entry_date'] === "0000-00-00" || $row['earliest_entry_date'] === "" || is_null($row['earliest_entry_date']))
+			? ""
+			: $row['earliest_entry_date'];
+
+		$latest_completion_date = ($row['latest_completion_date'] === "0000-00-00" || $row['latest_completion_date'] === "" || is_null($row['latest_completion_date']))
+			? ""
+			: $row['latest_completion_date'];
+	}
+	}
+	
+	$mDB->remove();
+	
+	$objResponse->assign("earliest_entry_date".$auto_seq,"innerHTML",$earliest_entry_date);
+	$objResponse->assign("latest_completion_date".$auto_seq,"innerHTML",$latest_completion_date);	
+	
+	
+    return $objResponse;
+	
+}
+
 $xajax->processRequest();
 
 
@@ -421,26 +463,51 @@ $list_view
 
 				$('td:eq(8)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+total_contract_amt+'</div>' );
 
-				//實際進場日期
-				var actual_entry_date = "";
-				if (aData[24] != null && aData[24] != "" && aData[24] != "0000-00-00")
-					actual_entry_date = aData[24];
+				// 工程人力實際進場日期和實際完工日期
+				var earliest_entry_date = '<div id="earliest_entry_date'+aData[18]+'"></div>';
+				var latest_completion_date = '<div id="latest_completion_date'+aData[18]+'"></div>';
+				xajax_returnValue(aData[18]);
 
-				$('td:eq(9)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+actual_entry_date+'</div>' );
+				// 實際進場日期 (工程人力最早進場日 or DB欄位)
+				var entry_date = "";
+				if (aData[18] != null && aData[18] != "") {
+					entry_date = '<div id="earliest_entry_date'+aData[18]+'"></div>';
+				} else if (aData[24] != null && aData[24] != "" && aData[24] != "0000-00-00") {
+					entry_date = aData[24];
+				}
 
-				//預計完工日期
+				$('td:eq(9)', nRow).html(
+					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
+					+ entry_date +
+					'</div>'
+				);
+
+
+				// 預計完工日期
 				var completion_date = "";
 				if (aData[26] != null && aData[26] != "" && aData[26] != "0000-00-00")
 					completion_date = aData[26];
 
-				$('td:eq(10)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+completion_date+'</div>' );
+				$('td:eq(10)', nRow).html(
+					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
+					+ completion_date +
+					'</div>'
+				);
 
-				//實際完工日期
-				var actual_completion_date = "";
-				if (aData[25] != null && aData[25] != "" && aData[25] != "0000-00-00")
-					actual_completion_date = aData[25];
 
-				$('td:eq(11)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+actual_completion_date+'</div>' );
+				// 工程人力實際完工日 (最晚 or DB欄位)
+				var completion_actual = "";
+				if (aData[18] != null && aData[18] != "") {
+					completion_actual = '<div id="latest_completion_date'+aData[18]+'"></div>';
+				} else if (aData[25] != null && aData[25] != "" && aData[25] != "0000-00-00") {
+					completion_actual = aData[25];
+				}
+
+				$('td:eq(11)', nRow).html(
+					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
+					+ completion_actual +
+					'</div>'
+				);
 
 
 				//第一期預收款請款方式
