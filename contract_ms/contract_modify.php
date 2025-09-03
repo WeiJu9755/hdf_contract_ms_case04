@@ -508,7 +508,7 @@ $style_css
 							<input type="text" class="inputtext" id="total_contract_amt" name="total_contract_amt" size="20" style="width:100%;max-width:250px;" value="$total_contract_amt" onchange="setEdit();"/>
 						</div> 
 					</div>
-					<div>
+					<!--<div>
 						<div class="field_div1">實際進場日期:</div> 
 						<div class="field_div2">
 							<div class="input-group" id="actual_entry_date" style="width:100%;max-width:250px;">
@@ -525,7 +525,7 @@ $style_css
 								});
 							</script>
 						</div> 
-					</div>
+					</div>-->
 					<div>
 						<div class="field_div1">預計完工日期:</div> 
 						<div class="field_div2">
@@ -544,7 +544,7 @@ $style_css
 							</script>
 						</div> 
 					</div>
-					<div>
+					<!--<div>
 						<div class="field_div1">實際完工日期:</div> 
 						<div class="field_div2">
 							<div class="input-group" id="actual_completion_date" style="width:100%;max-width:250px;">
@@ -561,7 +561,7 @@ $style_css
 								});
 							</script>
 						</div> 
-					</div>
+					</div>-->
 					<div>
 						<div class="field_div1">第一期預收款請款方式:</div> 
 						<div class="field_div2">

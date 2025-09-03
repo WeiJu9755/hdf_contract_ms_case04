@@ -468,14 +468,11 @@ $list_view
 				var latest_completion_date = '<div id="latest_completion_date'+aData[18]+'"></div>';
 				xajax_returnValue(aData[18]);
 
-				// 實際進場日期 (工程人力最早進場日 or DB欄位)
+				// 實際進場日期 
 				var entry_date = "";
 				if (aData[18] != null && aData[18] != "") {
 					entry_date = '<div id="earliest_entry_date'+aData[18]+'"></div>';
-				} else if (aData[24] != null && aData[24] != "" && aData[24] != "0000-00-00") {
-					entry_date = aData[24];
-				}
-
+				} 
 				$('td:eq(9)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
 					+ entry_date +
@@ -499,10 +496,7 @@ $list_view
 				var completion_actual = "";
 				if (aData[18] != null && aData[18] != "") {
 					completion_actual = '<div id="latest_completion_date'+aData[18]+'"></div>';
-				} else if (aData[25] != null && aData[25] != "" && aData[25] != "0000-00-00") {
-					completion_actual = aData[25];
-				}
-
+				} 
 				$('td:eq(11)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
 					+ completion_actual +
