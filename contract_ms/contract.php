@@ -482,8 +482,8 @@ $list_view
 
 				// 預計完工日期
 				var completion_date = "";
-				if (aData[26] != null && aData[26] != "" && aData[26] != "0000-00-00")
-					completion_date = aData[26];
+				if (aData[24] != null && aData[24] != "" && aData[24] != "0000-00-00")
+					completion_date = aData[24];
 
 				$('td:eq(10)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
