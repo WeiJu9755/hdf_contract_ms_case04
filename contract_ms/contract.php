@@ -451,10 +451,26 @@ $list_view
 
 				//合約承攬建物棟數
 				var buildings_contract = "";
+				var buildings_contract2 = "";
+				var std_layer_floor = "";
+				var roof_protrusion_floor = "";
+
+
 				if (aData[22] != null && aData[22] != "")
 					buildings_contract = aData[22];
+				if (aData[25] != null && aData[25] != "")
+					buildings_contract2 = aData[25];
+				if (aData[26] != null && aData[26] != "")
+					std_layer_floor = aData[26];
+				if (aData[27] != null && aData[27] != "")
+					roof_protrusion_floor = aData[27];
 
-				$('td:eq(7)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+buildings_contract+'</div>' );
+				$('td:eq(7)', nRow).html(
+				'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">' +
+					buildings_contract2 + ' / ' + std_layer_floor + '；' +
+					roof_protrusion_floor + '、' + buildings_contract +
+				'</div>'
+				);
 
 				//合約總價(含稅)
 				var total_contract_amt = "";

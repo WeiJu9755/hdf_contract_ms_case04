@@ -48,57 +48,63 @@ function SaveValue($aFormValues){
 	$objResponse = new xajaxResponse();
 	
 		//進行存檔動作
-		$site_db				= trim($aFormValues['site_db']);
-		$auto_seq				= trim($aFormValues['auto_seq']);
-		$memberID				= trim($aFormValues['memberID']);
-		$status1				= trim($aFormValues['status1']);
-		$status2				= trim($aFormValues['status2']);
-		$contract_date			= trim($aFormValues['contract_date']);
-		$ERP_no					= trim($aFormValues['ERP_no']);
-		$buildings_contract		= trim($aFormValues['buildings_contract']);
-		$total_contract_amt 	= trim($aFormValues['total_contract_amt']);
-		$actual_entry_date 		= trim($aFormValues['actual_entry_date']);
-		$completion_date 		= trim($aFormValues['completion_date']);
-		$actual_completion_date = trim($aFormValues['actual_completion_date']);
-		$advance_payment1		= trim($aFormValues['advance_payment1']);
-		$estimated_payment_date1 = trim($aFormValues['estimated_payment_date1']);
-		$request_date1			= trim($aFormValues['request_date1']);
-		$advance_payment2		= trim($aFormValues['advance_payment2']);
-		$estimated_payment_date2 = trim($aFormValues['estimated_payment_date2']);
-		$request_date2			= trim($aFormValues['request_date2']);
-		$advance_payment3		= trim($aFormValues['advance_payment3']);
-		$estimated_payment_date3 = trim($aFormValues['estimated_payment_date3']);
-		$request_date3			= trim($aFormValues['request_date3']);
+		$site_db					= trim($aFormValues['site_db']);
+		$auto_seq					= trim($aFormValues['auto_seq']);
+		$memberID					= trim($aFormValues['memberID']);
+		$status1					= trim($aFormValues['status1']);
+		$status2					= trim($aFormValues['status2']);
+		$contract_date				= trim($aFormValues['contract_date']);
+		$ERP_no						= trim($aFormValues['ERP_no']);
+		$buildings_contract			= trim($aFormValues['buildings_contract']);
+		$buildings_contract2		= trim($aFormValues['buildings_contract2']);
+		$std_layer_floor	    	= trim($aFormValues['std_layer_floor']);
+		$roof_protrusion_floor 	= trim($aFormValues['roof_protrusion_floor']);
+		$total_contract_amt 		= trim($aFormValues['total_contract_amt']);
+		$actual_entry_date 			= trim($aFormValues['actual_entry_date']);
+		$completion_date 			= trim($aFormValues['completion_date']);
+		$actual_completion_date 	= trim($aFormValues['actual_completion_date']);
+		$advance_payment1			= trim($aFormValues['advance_payment1']);
+		$estimated_payment_date1 	= trim($aFormValues['estimated_payment_date1']);
+		$request_date1				= trim($aFormValues['request_date1']);
+		$advance_payment2			= trim($aFormValues['advance_payment2']);
+		$estimated_payment_date2 	= trim($aFormValues['estimated_payment_date2']);
+		$request_date2				= trim($aFormValues['request_date2']);
+		$advance_payment3			= trim($aFormValues['advance_payment3']);
+		$estimated_payment_date3 	= trim($aFormValues['estimated_payment_date3']);
+		$request_date3				= trim($aFormValues['request_date3']);
 
-		$confirm4				= trim($aFormValues['confirm4']);
+		$confirm4					= trim($aFormValues['confirm4']);
 		
 		//存入info實體資料庫中
 		$mDB = "";
 		$mDB = new MywebDB();
 
 		$Qry="UPDATE CaseManagement set
-				 status1			= '$status1'
-				,status2			= '$status2'
-				,contract_date		= '$contract_date'
-				,ERP_no				= '$ERP_no'
-				,buildings_contract	= '$buildings_contract'
-				,total_contract_amt	= '$total_contract_amt'
-				,actual_entry_date	= '$actual_entry_date'
-				,completion_date	= '$completion_date'
-				,actual_completion_date	= '$actual_completion_date'
-				,advance_payment1	= '$advance_payment1'
-				,estimated_payment_date1 = '$estimated_payment_date1'
-				,request_date1		= '$request_date1'
-				,advance_payment2	= '$advance_payment2'
-				,estimated_payment_date2 = '$estimated_payment_date2'
-				,request_date2		= '$request_date2'
-				,advance_payment3	= '$advance_payment3'
-				,estimated_payment_date3 = '$estimated_payment_date3'
-				,request_date3		= '$request_date3'
-				,confirm4			= '$confirm4'
-				,makeby4			= '$memberID'
-				,last_modify4		= now()
-				where auto_seq = '$auto_seq'";
+				 status1					= '$status1'
+				,status2					= '$status2'
+				,contract_date				= '$contract_date'
+				,ERP_no						= '$ERP_no'
+				,buildings_contract			= '$buildings_contract'
+				,buildings_contract2		= '$buildings_contract2'
+				,std_layer_floor	    	= '$std_layer_floor'
+				,roof_protrusion_floor 		= '$roof_protrusion_floor'
+				,total_contract_amt			= '$total_contract_amt'
+				,actual_entry_date			= '$actual_entry_date'
+				,completion_date			= '$completion_date'
+				,actual_completion_date		= '$actual_completion_date'
+				,advance_payment1			= '$advance_payment1'
+				,estimated_payment_date1 	= '$estimated_payment_date1'
+				,request_date1				= '$request_date1'
+				,advance_payment2			= '$advance_payment2'
+				,estimated_payment_date2 	= '$estimated_payment_date2'
+				,request_date2				= '$request_date2'
+				,advance_payment3			= '$advance_payment3'
+				,estimated_payment_date3	= '$estimated_payment_date3'
+				,request_date3				= '$request_date3'
+				,confirm4					= '$confirm4'
+				,makeby4					= '$memberID'
+				,last_modify4				= now()
+				where auto_seq 				= '$auto_seq'";
 				
 		$mDB->query($Qry);
         $mDB->remove();
@@ -181,6 +187,9 @@ if ($total > 0) {
 
 	$ERP_no = $row['ERP_no'];
 	$buildings_contract = $row['buildings_contract'];
+	$buildings_contract2 = $row['buildings_contract2'];
+	$std_layer_floor = $row['std_layer_floor'];
+	$roof_protrusion_floor = $row['roof_protrusion_floor'];
 	$total_contract_amt = $row['total_contract_amt'];
 
 	$advance_payment1 = $row['advance_payment1'];
@@ -411,7 +420,7 @@ $style_css
 										</div>
 									</div>
 									<div class="myrow">
-										<div class="mycell code_class">建物棟數:</div>
+										<div class="mycell code_class">評估建物棟數:</div>
 										<div class="mycell blue weight">$buildings</div>
 									</div>
 									<!--
@@ -497,13 +506,31 @@ $style_css
 						</div> 
 					</div>
 					<div>
-						<div class="field_div1">合約承攬建物棟數:</div> 
+						<div class="field_div1">合約棟數 : </div> 
+						<div class="field_div2">
+							<input type="text" class="inputtext" id="buildings_contract2" name="buildings_contract2" size="20" maxlength="160" style="width:100%;max-width:300px;" value="$buildings_contract2" onchange="setEdit();"/>
+						</div> 
+					</div>
+					<div>
+						<div class="field_div1">標準層(M2): </div> 
+						<div class="field_div2">
+							<input type="text" class="inputtext" id="std_layer_floor" name="std_layer_floor" size="20" maxlength="160" style="width:100%;max-width:300px;" value="$std_layer_floor" onchange="setEdit();"/>
+						</div> 
+					</div>
+					<div>
+						<div class="field_div1">屋突層(M2): </div> 
+						<div class="field_div2">
+							<input type="text" class="inputtext" id="roof_protrusion_floor" name="roof_protrusion_floor" size="20" maxlength="160" style="width:100%;max-width:300px;" value="$roof_protrusion_floor" onchange="setEdit();"/>
+						</div> 
+					</div>
+					<div>
+						<div class="field_div1">其他建物 : </div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext" id="buildings_contract" name="buildings_contract" size="20" maxlength="160" style="width:100%;max-width:450px;" value="$buildings_contract" onchange="setEdit();"/>
 						</div> 
 					</div>
 					<div>
-						<div class="field_div1">合約總價(含稅):</div> 
+						<div class="field_div1">合約總價(含稅) : </div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext" id="total_contract_amt" name="total_contract_amt" size="20" style="width:100%;max-width:250px;" value="$total_contract_amt" onchange="setEdit();"/>
 						</div> 
