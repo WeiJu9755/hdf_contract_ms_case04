@@ -360,17 +360,29 @@ if (!($detect->isMobile() && !$detect->isTablet())) {
 }
 	
 	
-$show_view=<<<EOT
-
+$show_view = <<<EOT
 <style type="text/css">
-#db_table {
-	width: 100% !Important;
-	margin: 5px 0 0 0 !Important;
+.table-wrap {
+	max-width: calc(100vw - 350px); /* 扣掉左側選單寬度 */
+	max-height: 70vh;               /* 固定高度 */
+	overflow-x: auto;               /* 左右拉霸 */
+	overflow-y: auto;               /* 上下拉霸 */
+	margin: 0 auto;                 /* ✅ 置中 (不再靠右) */
+	border: 1px solid #ccc;
+	background: #fff;
+	box-sizing: border-box;
 }
 
+#db_table {
+	width: 100%;
+	min-width: 1200px;
+	border-collapse: collapse;
+}
 </style>
 
-$list_view
+<div class="table-wrap">
+	$list_view
+</div>
 
 <script type="text/javascript" charset="utf-8">
 	var oTable;
