@@ -314,6 +314,7 @@ $list_view=<<<EOT
 		</div>
 	</div>
 	$show_ConfirmSending_btn
+	<div class="table-wrap">
 	<table class="table table-bordered border-dark w-100" id="db_table" style="min-width:1200px;">
 		<thead class="table-light border-dark">
 			<tr style="border-bottom: 1px solid #000;">
@@ -322,22 +323,22 @@ $list_view=<<<EOT
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">區域</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">案件編號</th>
 				<th class="text-center text-nowrap vmiddle" style="width:10%;padding: 10px;background-color: #CBF3FC;">工程名稱</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">上包合約<br>簽訂日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">上包合約<br>簽訂日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">合約號碼<br>(ERP專案代號)</th>
 				<th class="text-center text-nowrap vmiddle" style="width:10%;padding: 10px;background-color: #CBF3FC;">合約承攬建物棟數</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">合約總價(含稅)</th>
-				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">實際<br>進場日期</th>
-				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">預計<br>完工日期</th>
-				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">實際<br>完工日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">實際<br>進場日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">預計<br>完工日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">實際<br>完工日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第一期預收款<br>請款方式</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第一期預收<br>預估日期</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第一期<br>請款日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第一期預收<br>預估日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第一期<br>請款日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第二期預收款<br>請款方式</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第二期預收<br>預估日期</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第二期<br>請款日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第二期預收<br>預估日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第二期<br>請款日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第三期預收款<br>請款方式</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第三期預收<br>預估日期</th>
-				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">第三期<br>請款日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第三期預收<br>預估日期</th>
+				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">第三期<br>請款日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">確認</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">處理</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">最後修改</th>
@@ -349,6 +350,7 @@ $list_view=<<<EOT
 			</tr>
 		</tbody>
 	</table>
+	</div>
 </div>
 EOT;
 
@@ -363,15 +365,12 @@ if (!($detect->isMobile() && !$detect->isTablet())) {
 $show_view = <<<EOT
 <style type="text/css">
 .table-wrap {
-	max-width: calc(100vw - 350px); /* 扣掉左側選單寬度 */
-	max-height: 70vh;               /* 固定高度 */
-	overflow-x: auto;               /* 左右拉霸 */
-	overflow-y: auto;               /* 上下拉霸 */
-	margin: 0 auto;                 /* ✅ 置中 (不再靠右) */
-	border: 1px solid #ccc;
-	background: #fff;
-	box-sizing: border-box;
+    width: calc(100vw - 350px); /* 扣掉左側控制面板寬度 */
+    overflow-x: auto;           /* 出現左右拉霸 */
+    overflow-y: auto;
+    border: 1px solid #ccc;
 }
+
 
 #db_table {
 	width: 100%;
@@ -380,11 +379,12 @@ $show_view = <<<EOT
 }
 </style>
 
-<div class="table-wrap">
+
 	$list_view
-</div>
+
 
 <script type="text/javascript" charset="utf-8">
+
 	var oTable;
 	$(document).ready(function() {
 		$('#db_table').dataTable( {
@@ -393,8 +393,8 @@ $show_view = <<<EOT
 			"responsive":  {
 				details: true
 			},//RWD響應式
-			"scrollX": '$scroll',
-			/*"scrollY": 600,*/
+			"scrollX": true,
+			"scrollY": 500,
 			"paging": true,
 			"pageLength": 50,
 			"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
