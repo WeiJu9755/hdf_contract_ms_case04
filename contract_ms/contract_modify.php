@@ -512,13 +512,13 @@ $style_css
 						</div> 
 					</div>
 					<div>
-						<div class="field_div1">標準層(M2): </div> 
+						<div class="field_div1">標準層範圍: </div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext" id="std_layer_floor" name="std_layer_floor" size="20" maxlength="160" style="width:100%;max-width:300px;" value="$std_layer_floor" onchange="setEdit();"/>
 						</div> 
 					</div>
 					<div>
-						<div class="field_div1">屋突層(M2): </div> 
+						<div class="field_div1">屋突層範圍: </div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext" id="roof_protrusion_floor" name="roof_protrusion_floor" size="20" maxlength="160" style="width:100%;max-width:300px;" value="$roof_protrusion_floor" onchange="setEdit();"/>
 						</div> 
