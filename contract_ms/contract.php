@@ -314,8 +314,8 @@ $list_view=<<<EOT
 		</div>
 	</div>
 	$show_ConfirmSending_btn
-	<div class="table-wrap">
-	<table class="table table-bordered border-dark w-100" id="db_table" style="min-width:1200px;">
+
+	<table class="table table-bordered border-dark w-100" id="db_table" style="min-width:800px;">
 		<thead class="table-light border-dark">
 			<tr style="border-bottom: 1px solid #000;">
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">狀態(1)</th>
@@ -350,7 +350,7 @@ $list_view=<<<EOT
 			</tr>
 		</tbody>
 	</table>
-	</div>
+
 </div>
 EOT;
 
@@ -364,38 +364,56 @@ if (!($detect->isMobile() && !$detect->isTablet())) {
 	
 $show_view = <<<EOT
 <style type="text/css">
-.table-wrap {
-    width: calc(100vw - 350px); /* 扣掉左側控制面板寬度 */
-    overflow-x: auto;           /* 出現左右拉霸 */
-    overflow-y: auto;
-    border: 1px solid #ccc;
-}
 
 
 #db_table {
 	width: 100%;
-	min-width: 1200px;
+	min-width: 800px;
 	border-collapse: collapse;
+}
+
+/* 重點在這裡：控制 DataTables 滾動區寬度 */
+#db_table_wrapper .dataTables_scroll {
+    width: calc(100vw - 350px); /* 視窗寬度扣掉左邊控制板 350px */
+   
 }
 </style>
 
 
 	$list_view
 
+<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
 
+<script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script type="text/javascript" charset="utf-8">
+	
+	function getOffsetByDevice() {
+		const screenWidth = window.innerWidth;
 
-	var oTable;
+		if (screenWidth <= 768) {
+			// 手機裝置
+			return 250;
+		} else if (screenWidth <= 1024) {
+			// 平板裝置
+			return 500;
+		} else {
+			// 桌機裝置
+			return 500;
+		}
+	}
+
 	$(document).ready(function() {
+		var scrollY = $(window).height() - getOffsetByDevice();
 		$('#db_table').dataTable( {
-			"processing": true,
+			processing: false,
 			"serverSide": true,
-			"responsive":  {
-				details: true
-			},//RWD響應式
+			"responsive": {
+					details: true
+				},
 			"scrollX": true,
-			"scrollY": 500,
+			 scrollY: scrollY + "px",
 			"paging": true,
+			"scrollCollapse": true,
 			"pageLength": 50,
 			"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 			"pagingType": "full_numbers",  //分页样式： simple,simple_numbers,full,full_numbers
@@ -410,6 +428,7 @@ $show_view = <<<EOT
 			"fixedColumns": {
         		left: 1,
     		},
+			"deferRender": true,
 			"fnRowCallback": function( nRow, aData, iDisplayIndex ) { 
 
 				//狀態(1)
@@ -641,10 +660,17 @@ $show_view = <<<EOT
 			
 		});
 	
-		/* Init the table */
-		oTable = $('#db_table').dataTable();
+
 		
 	} );
+	 $(document).ready(function () {
+		initTableWithDynamicHeight();
+
+		// 若視窗尺寸改變，也重新計算 scrollY
+		$(window).resize(function () {
+		initTableWithDynamicHeight();
+		});
+	});
 
 var myDel = function(auto_seq) {
 
