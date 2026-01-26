@@ -103,7 +103,8 @@ function SaveValue($aFormValues){
 				,request_date3				= '$request_date3'
 				,confirm4					= '$confirm4'
 				,makeby4					= '$memberID'
-				,last_modify4				= now()
+				,last_modify4				= now(),
+				update_count4				= update_count4 + 1
 				where auto_seq 				= '$auto_seq'";
 				
 		$mDB->query($Qry);

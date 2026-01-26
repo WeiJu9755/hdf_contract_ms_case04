@@ -315,14 +315,14 @@ $list_view=<<<EOT
 	</div>
 	$show_ConfirmSending_btn
 
-	<table class="table table-bordered border-dark w-100" id="db_table" style="min-width:800px;">
+	<table class="table table-bordered border-dark w-100" id="db_table" style="min-width:1200px;">
 		<thead class="table-light border-dark">
 			<tr style="border-bottom: 1px solid #000;">
-				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">狀態(1)</th>
-				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">狀態(2)</th>
+				<th class="text-center text-nowrap vmiddle" style="width:2%;padding: 10px;background-color: #CBF3FC;">狀態(1)</th>
+				<th class="text-center text-nowrap vmiddle" style="width:2%;padding: 10px;background-color: #CBF3FC;">狀態(2)</th>
+				<th class="text-center text-nowrap vmiddle" style="width7%;padding: 10px;background-color: #CBF3FC;">工程名稱</th>
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 10px;background-color: #CBF3FC;">區域</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">案件編號</th>
-				<th class="text-center text-nowrap vmiddle" style="width:10%;padding: 10px;background-color: #CBF3FC;">工程名稱</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 20px;background-color: #CBF3FC;">上包合約<br>簽訂日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">合約號碼<br>(ERP專案代號)</th>
 				<th class="text-center text-nowrap vmiddle" style="width:10%;padding: 10px;background-color: #CBF3FC;">合約承攬建物棟數</th>
@@ -366,54 +366,85 @@ $show_view = <<<EOT
 <style type="text/css">
 
 
-#db_table {
-	width: 100%;
-	min-width: 800px;
-	border-collapse: collapse;
+/* 預設：手機版或小螢幕 (100% 寬度) */
+#db_table_wrapper .dataTables_scroll {
+    width: 100%; 
+    margin: 0 auto;
 }
 
-/* 重點在這裡：控制 DataTables 滾動區寬度 */
-#db_table_wrapper .dataTables_scroll {
-    width: calc(100vw - 350px); /* 視窗寬度扣掉左邊控制板 350px */
-   
+/* 當螢幕寬度大於 768px 時 (桌機版) */
+@media screen and (min-width: 768px) {
+    #db_table_wrapper .dataTables_scroll {
+        width: calc(100vw - 370px); 
+        margin: 0 auto;
+    }
+    /* 桌機版維持不換行，讓橫向拉霸正常運作 */
+    #db_table td, #db_table th {
+        white-space: nowrap !important;
+    }
+}
+
+/* 專門處理手機版 (小於 768px) 的換行與寬度 */
+@media screen and (max-width: 767px) {
+    /* 1. 允許前三欄換行，並限制最大寬度 */
+    #db_table thead th:nth-child(1), #db_table tbody td:nth-child(1),
+    #db_table thead th:nth-child(2), #db_table tbody td:nth-child(2),
+    #db_table thead th:nth-child(3), #db_table tbody td:nth-child(3) {
+        white-space: normal !important; /* 允許換行 */
+        word-break: break-all !important; /* 強制長文字斷行 */
+        min-width: 80px !important;      /* 設定一個最小寬度防止縮太扁 */
+        max-width: 100px !important;      /* 設定最大寬度，避免佔據太多螢幕 */
+        font-size: 12px !important;
+        padding: 5px 2px !important;
+    }
+
+    /* 2. 修正原本程式碼中 div 的 d-flex 限制 */
+    /* 因為原本有 text-nowrap 類別，要在手機版強制解除 */
+    #db_table td:nth-child(-n+3) div.text-nowrap {
+        white-space: normal !important;
+    }
+
+    /* 3. 調整 DataTables 凍結容器的總寬度 */
+    /* 確保這三個欄位加起來的總和不會超過螢幕的一半(例如控制在 180px 內) */
+    #db_table_wrapper .DTFC_LeftWrapper, 
+    #db_table_wrapper .DTFC_LeftBodyLiner,
+    #db_table_wrapper .DTFC_LeftHeadWrapper {
+        width: 180px !important; 
+    }
+}
+
+/* 其他共用樣式保持不變 */
+#db_table td, #db_table th {
+    background-color: #fff;
+}
+.dataTables_scrollBody {
+    max-height: 500px !important;
+    overflow-y: auto !important;
+    overflow-x: auto !important;
 }
 </style>
 
 
 	$list_view
 
-<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
 
-<script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-	
-	function getOffsetByDevice() {
-		const screenWidth = window.innerWidth;
 
-		if (screenWidth <= 768) {
-			// 手機裝置
-			return 250;
-		} else if (screenWidth <= 1024) {
-			// 平板裝置
-			return 500;
-		} else {
-			// 桌機裝置
-			return 500;
-		}
-	}
-
+	var oTable;
 	$(document).ready(function() {
-		var scrollY = $(window).height() - getOffsetByDevice();
+
+		var windowWidth = $(window).width();
+    	var fixedLeftCount = (windowWidth < 768) ? 3 : 3;
+
 		$('#db_table').dataTable( {
-			processing: false,
+			"processing": true,
 			"serverSide": true,
-			"responsive": {
-					details: true
-				},
-			"scrollX": true,
-			 scrollY: scrollY + "px",
+			"responsive": false,       // 必須關閉，否則會與 FixedColumns 衝突
+			"scrollX": true,           // 啟用左右拉霸
+			"scrollY": "500px",        // 固定高度 500px
+			"scrollCollapse": true,    // 當資料筆數少時，高度自動收縮
+
 			"paging": true,
-			"scrollCollapse": true,
 			"pageLength": 50,
 			"lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
 			"pagingType": "full_numbers",  //分页样式： simple,simple_numbers,full,full_numbers
@@ -425,10 +456,7 @@ $show_view = <<<EOT
 						/*"sUrl": '//cdn.datatables.net/plug-ins/1.12.1/i18n/zh-HANT.json'*/
 					},
 			"fixedHeader": true,
-			"fixedColumns": {
-        		left: 1,
-    		},
-			"deferRender": true,
+			"fixedColumns": {left:fixedLeftCount },
 			"fnRowCallback": function( nRow, aData, iDisplayIndex ) { 
 
 				//狀態(1)
@@ -445,26 +473,26 @@ $show_view = <<<EOT
 
 				$('td:eq(1)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+status2+'</div>' );
 
+				//工程名稱
+				var construction_id = "";
+				if (aData[4] != null && aData[4] != "")
+					construction_id = aData[4];
+
+				$('td:eq(2)', nRow).html( '<div class="d-flex justify-content-center align-items-center size12 text-center" style="height:auto;min-height:32px;">'+construction_id+'</div>' );
+
 				//區域
 				var region = "";
 				if (aData[2] != null && aData[2] != "")
 					region = aData[2];
 
-				$('td:eq(2)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+region+'</div>' );
+				$('td:eq(3)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+region+'</div>' );
 
 				//案件編號
 				var case_id = "";
 				if (aData[3] != null && aData[3] != "")
 					case_id = aData[3];
 
-				$('td:eq(3)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 weight text-nowrap" style="height:auto;min-height:32px;">'+case_id+'</div>' );
-
-				//工程名稱
-				var construction_id = "";
-				if (aData[4] != null && aData[4] != "")
-					construction_id = aData[4];
-
-				$('td:eq(4)', nRow).html( '<div class="d-flex justify-content-center align-items-center size12 text-center" style="height:auto;min-height:32px;">'+construction_id+'</div>' );
+				$('td:eq(4)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 weight text-nowrap" style="height:auto;min-height:32px;">'+case_id+'</div>' );
 
 				//上包合約簽訂日期
 				var contract_date = "";
@@ -640,19 +668,42 @@ $show_view = <<<EOT
 				}
 
 				$('td:eq(22)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center" style="height:auto;min-height:32px;">'+show_btn+'</div>' );
+				
 
 				//最後修改
-				var last_modify3 = "";
-				if (aData[17] != null && aData[17] != "")
-					last_modify3 = '<div class="text-nowrap">'+moment(aData[17]).format('YYYY-MM-DD HH:mm')+'</div>';
-				
+				var last_modify4 = (aData[17] != null && aData[17] != "") 
+					? '<div class="text-nowrap">' + moment(aData[17]).format('YYYY-MM-DD HH:mm') + '</div>' 
+					: "";
+					
 				//編輯人員
-				var member_name = "";
-				if (aData[19] != null && aData[19] != "")
-					member_name = '<div class="text-nowrap">'+aData[19]+'</div>';
+				var member_name = (aData[19] != null && aData[19] != "") 
+					? '<span class="text-nowrap">' + aData[19] + '</span>' 
+					: "";
 
-				$('td:eq(23)', nRow).html( '<div class="text-center" style="height:auto;min-height:32px;">'+last_modify3+member_name+'</div>' );
+				var update_count_val = (aData[28] != null && aData[28] != "") ? aData[28] : "0";
 
+				if ((last_modify4 == null || last_modify4 == "") && (member_name == null || member_name == "")) {
+				
+				$('td:eq(23)', nRow).html('<div style="height:auto;min-height:32px;"></div>');
+
+				} else {
+
+				//累計修改次數
+				var update_count_html = ' <span class="badge rounded-1 bg-secondary opacity-75" ' +
+										'style="cursor:help; font-size:10px; padding: 2px 4px; margin-left: 4px;" ' +
+										'data-bs-toggle="tooltip" ' + 
+										'data-bs-html="true" ' + // 允許 tooltip 內含 HTML
+										'title="累計修改次數：' + update_count_val + '次">' + 
+										update_count_val + '</span>';
+
+				$('td:eq(23)', nRow).html( 
+					'<div class="text-center" style="height:auto;min-height:32px;">' + 
+						last_modify4 + 
+						'<div>' + member_name + update_count_html + '</div>' + 
+					'</div>' 
+				);
+
+					}
 
 				return nRow;
 			
@@ -660,17 +711,10 @@ $show_view = <<<EOT
 			
 		});
 	
-
+		/* Init the table */
+		oTable = $('#db_table').dataTable();
 		
 	} );
-	 $(document).ready(function () {
-		initTableWithDynamicHeight();
-
-		// 若視窗尺寸改變，也重新計算 scrollY
-		$(window).resize(function () {
-		initTableWithDynamicHeight();
-		});
-	});
 
 var myDel = function(auto_seq) {
 
