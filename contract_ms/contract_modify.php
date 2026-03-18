@@ -62,6 +62,7 @@ function SaveValue($aFormValues){
 		$total_contract_amt 		= trim($aFormValues['total_contract_amt']);
 		$actual_entry_date 			= trim($aFormValues['actual_entry_date']);
 		$completion_date 			= trim($aFormValues['completion_date']);
+		$estimated_arrival_date 	= trim($aFormValues['estimated_arrival_date']);
 		$actual_completion_date 	= trim($aFormValues['actual_completion_date']);
 		$advance_payment1			= trim($aFormValues['advance_payment1']);
 		$estimated_payment_date1 	= trim($aFormValues['estimated_payment_date1']);
@@ -91,6 +92,7 @@ function SaveValue($aFormValues){
 				,total_contract_amt			= '$total_contract_amt'
 				,actual_entry_date			= '$actual_entry_date'
 				,completion_date			= '$completion_date'
+				,estimated_arrival_date		= '$estimated_arrival_date'
 				,actual_completion_date		= '$actual_completion_date'
 				,advance_payment1			= '$advance_payment1'
 				,estimated_payment_date1 	= '$estimated_payment_date1'
@@ -104,8 +106,22 @@ function SaveValue($aFormValues){
 				,confirm4					= '$confirm4'
 				,makeby4					= '$memberID'
 				,last_modify4				= now(),
-				update_count4				= update_count4 + 1
+				update_count4				= update_count4 + 1,
+				makeby8              = '$memberID',
+				last_modify8         = NOW(),
+				update_count8		= update_count8 + 1
 				where auto_seq 				= '$auto_seq'";
+				
+		$mDB->query($Qry);
+
+		if($status1 == '未簽約' && $status2 == '已簽回' && $confirm4 = 'Y' ){
+			$Qry="UPDATE CaseManagement 
+				SET
+					makeby5              = '$memberID',
+					last_modify5         = NOW(),
+					update_count5		= update_count5 + 1
+				WHERE auto_seq = '$auto_seq';";
+		}
 				
 		$mDB->query($Qry);
         $mDB->remove();
@@ -476,10 +492,6 @@ $style_css
 										<div class="mycell code_class">報價日期:</div>
 										<div class="mycell blue weight">$quotation_date</div>
 									</div>
-									<div class="myrow">
-										<div class="mycell code_class">預計進場日期:</div>
-										<div class="mycell blue weight">$estimated_arrival_date</div>
-									</div>
 									<!--
 									<div class="myrow">
 										<div class="mycell code_class">實際進場日期:</div>
@@ -534,6 +546,24 @@ $style_css
 						<div class="field_div1">合約總價(含稅) : </div> 
 						<div class="field_div2">
 							<input type="text" class="inputtext" id="total_contract_amt" name="total_contract_amt" size="20" style="width:100%;max-width:250px;" value="$total_contract_amt" onchange="setEdit();"/>
+						</div> 
+					</div>
+					<div>
+						<div class="field_div1">預計進場日期:</div> 
+						<div class="field_div2">
+							<div class="input-group" id="estimated_arrival_date" style="width:100%;max-width:250px;">
+								<input type="text" class="form-control" name="estimated_arrival_date" placeholder="請輸入實際進場日期" aria-describedby="estimated_arrival_date" value="$estimated_arrival_date">
+								<button class="btn btn-outline-secondary input-group-append input-group-addon" type="button" data-target="#estimated_arrival_date" data-toggle="datetimepicker"><i class="bi bi-calendar"></i></button>
+							</div>
+							<script type="text/javascript">
+								$(function () {
+									$('#estimated_arrival_date').datetimepicker({
+										locale: 'zh-tw'
+										,format:"YYYY-MM-DD"
+										,allowInputToggle: true
+									});
+								});
+							</script>
 						</div> 
 					</div>
 					<!--<div>
