@@ -327,6 +327,7 @@ $list_view=<<<EOT
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">合約號碼<br>(ERP專案代號)</th>
 				<th class="text-center text-nowrap vmiddle" style="width:10%;padding: 10px;background-color: #CBF3FC;">合約承攬建物棟數</th>
 				<th class="text-center text-nowrap vmiddle" style="width:4%;padding: 10px;background-color: #CBF3FC;">合約總價(含稅)</th>
+				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">預計<br>進場日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">實際<br>進場日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">預計<br>完工日期</th>
 				<th class="text-center text-nowrap vmiddle" style="width:3%;padding: 20px;background-color: #CBF3FC;">實際<br>完工日期</th>
@@ -543,12 +544,23 @@ $show_view = <<<EOT
 				var latest_completion_date = '<div id="latest_completion_date'+aData[18]+'"></div>';
 				xajax_returnValue(aData[18]);
 
+				// 預計進場日期 
+				var estimated_arrival_date = "";
+				if (aData[29] != null && aData[29] != "" && aData[29] != "0000-00-00")
+					estimated_arrival_date = aData[29];
+
+				$('td:eq(9)', nRow).html(
+					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
+					+ estimated_arrival_date +
+					'</div>'
+				);
+
 				// 實際進場日期 
 				var entry_date = "";
 				if (aData[18] != null && aData[18] != "") {
 					entry_date = '<div id="earliest_entry_date'+aData[18]+'"></div>';
 				} 
-				$('td:eq(9)', nRow).html(
+				$('td:eq(10)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
 					+ entry_date +
 					'</div>'
@@ -560,7 +572,7 @@ $show_view = <<<EOT
 				if (aData[24] != null && aData[24] != "" && aData[24] != "0000-00-00")
 					completion_date = aData[24];
 
-				$('td:eq(10)', nRow).html(
+				$('td:eq(11)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
 					+ completion_date +
 					'</div>'
@@ -572,7 +584,7 @@ $show_view = <<<EOT
 				if (aData[18] != null && aData[18] != "") {
 					completion_actual = '<div id="latest_completion_date'+aData[18]+'"></div>';
 				} 
-				$('td:eq(11)', nRow).html(
+				$('td:eq(12)', nRow).html(
 					'<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'
 					+ completion_actual +
 					'</div>'
@@ -584,63 +596,63 @@ $show_view = <<<EOT
 				if (aData[7] != null && aData[7] != "")
 					advance_payment1 = aData[7];
 
-				$('td:eq(12)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment1+'</div>' );
+				$('td:eq(13)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment1+'</div>' );
 
 				//第一期預收預估日期
 				var estimated_payment_date1 = "";
 				if (aData[8] != null && aData[8] != "" && aData[8] != "0000-00-00")
 					estimated_payment_date1 = aData[8];
 
-				$('td:eq(13)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date1+'</div>' );
+				$('td:eq(14)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date1+'</div>' );
 
 				//第一期請款日期
 				var request_date1 = "";
 				if (aData[9] != null && aData[9] != "" && aData[9] != "0000-00-00")
 					request_date1 = aData[9];
 
-				$('td:eq(14)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date1+'</div>' );
+				$('td:eq(15)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date1+'</div>' );
 
 				//第二期預收款請款方式
 				var advance_payment2 = "";
 				if (aData[10] != null && aData[10] != "")
 					advance_payment2 = aData[10];
 
-				$('td:eq(15)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment2+'</div>' );
+				$('td:eq(16)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment2+'</div>' );
 
 				//第二期預收預估日期
 				var estimated_payment_date2 = "";
 				if (aData[11] != null && aData[11] != "" && aData[11] != "0000-00-00")
 					estimated_payment_date2 = aData[11];
 
-				$('td:eq(16)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date2+'</div>' );
+				$('td:eq(17)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date2+'</div>' );
 
 				//第二期請款日期
 				var request_date2 = "";
 				if (aData[12] != null && aData[12] != "" && aData[12] != "0000-00-00")
 					request_date2 = aData[12];
 					
-				$('td:eq(17)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date2+'</div>' );
+				$('td:eq(18)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date2+'</div>' );
 
 				//第三期預收款請款方式
 				var advance_payment3 = "";
 				if (aData[13] != null && aData[13] != "")
 					advance_payment3 = aData[13];
 
-				$('td:eq(18)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment3+'</div>' );
+				$('td:eq(19)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12" style="height:auto;min-height:32px;">'+advance_payment3+'</div>' );
 
 				//第三期預收預估日期
 				var estimated_payment_date3 = "";
 				if (aData[14] != null && aData[14] != "" && aData[14] != "0000-00-00")
 					estimated_payment_date3 = aData[14];
 
-				$('td:eq(19)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date3+'</div>' );
+				$('td:eq(20)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+estimated_payment_date3+'</div>' );
 
 				//第三期請款日期
 				var request_date3 = "";
 				if (aData[15] != null && aData[15] != "" && aData[15] != "0000-00-00")
 					request_date3 = aData[15];
 
-				$('td:eq(20)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date3+'</div>' );
+				$('td:eq(21)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center size12 text-nowrap" style="height:auto;min-height:32px;">'+request_date3+'</div>' );
 
 				//確認
 				if ( aData[20] == "Y" ) {
@@ -650,7 +662,7 @@ $show_view = <<<EOT
 					var mcheck = "xajax_confirm("+aData[18]+",'Y','$memberID');";
 					var img_check = '<a href="javascript:void(0);" onclick="'+mcheck+'"><i class="bi bi-circle size16 gray"></i></a>';
 				}
-				$('td:eq(21)', nRow).html( '<div class="text-center">'+img_check+'</div>' );
+				$('td:eq(22)', nRow).html( '<div class="text-center">'+img_check+'</div>' );
 
 				var url1 = "openfancybox_edit('/index.php?ch=edit&auto_seq="+aData[18]+"&fm=$fm',800,'96%','');";
 				var mdel = "myDel("+aData[18]+");";
@@ -667,7 +679,7 @@ $show_view = <<<EOT
 						+'</div>';
 				}
 
-				$('td:eq(22)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center" style="height:auto;min-height:32px;">'+show_btn+'</div>' );
+				$('td:eq(23)', nRow).html( '<div class="d-flex justify-content-center align-items-center text-center" style="height:auto;min-height:32px;">'+show_btn+'</div>' );
 				
 
 				//最後修改
@@ -684,7 +696,7 @@ $show_view = <<<EOT
 
 				if ((last_modify4 == null || last_modify4 == "") && (member_name == null || member_name == "")) {
 				
-				$('td:eq(23)', nRow).html('<div style="height:auto;min-height:32px;"></div>');
+				$('td:eq(24)', nRow).html('<div style="height:auto;min-height:32px;"></div>');
 
 				} else {
 
@@ -696,7 +708,7 @@ $show_view = <<<EOT
 										'title="累計修改次數：' + update_count_val + '次">' + 
 										update_count_val + '</span>';
 
-				$('td:eq(23)', nRow).html( 
+				$('td:eq(24)', nRow).html( 
 					'<div class="text-center" style="height:auto;min-height:32px;">' + 
 						last_modify4 + 
 						'<div>' + member_name + update_count_html + '</div>' + 
