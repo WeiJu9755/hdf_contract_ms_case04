@@ -34,7 +34,7 @@
 
 	$aColumns = array( 'a.status1','a.status2','a.region','a.case_id','a.construction_id','b.engineering_name','a.contract_date','a.advance_payment1','a.estimated_payment_date1','a.request_date1','a.advance_payment2'
 		,'a.estimated_payment_date2','a.request_date2','a.advance_payment3','a.estimated_payment_date3','a.request_date3','a.makeby4','a.last_modify4','a.auto_seq','f.member_name','a.confirm4'
-		,'a.ERP_no','a.buildings_contract','a.total_contract_amt','a.completion_date','a.buildings_contract2','a.std_layer_floor','a.roof_protrusion_floor','a.update_count4','a.estimated_arrival_date');
+		,'a.ERP_no','a.buildings_contract','a.total_contract_amt','a.completion_date','a.buildings_contract2','a.std_layer_floor','a.roof_protrusion_floor','a.update_count4','a.estimated_arrival_date','a.Handler','e.employee_name','a.ContractingModel');
 			
 	/* Indexed column (used for fast and accurate table cardinality) */
 	$sIndexColumn = "auto_seq";
@@ -199,6 +199,7 @@
 		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
 		FROM   $sTable a
 		LEFT JOIN construction b ON b.construction_id = a.construction_id
+		LEFT JOIN employee e ON e.employee_id = a.Handler
 		LEFT JOIN memberinfo.member f on f.member_no = a.makeby4
 		$sWhere
 		$sOrder
