@@ -728,7 +728,7 @@ $show_view = <<<EOT
 										'title="累計修改次數：' + update_count_val + '次">' + 
 										update_count_val + '</span>';
 
-				$('td:eq(24)', nRow).html( 
+				$('td:eq(26)', nRow).html( 
 					'<div class="text-center" style="height:auto;min-height:32px;">' + 
 						last_modify4 + 
 						'<div>' + member_name + update_count_html + '</div>' + 
