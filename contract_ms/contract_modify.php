@@ -27,6 +27,46 @@ function processform($aFormValues){
 	
 	$web_id				= trim($aFormValues['web_id']);
 	$auto_seq			= trim($aFormValues['auto_seq']);
+	$status1				= trim($aFormValues['status1']);
+
+	// 案件狀態為「已完工」時，確認每一棟都已填寫實際完成日。
+	if ($status1 == '已完工') {
+		$mDB = new MywebDB();
+		$Qry = "SELECT case_id FROM CaseManagement WHERE auto_seq = '$auto_seq'";
+		$mDB->query($Qry);
+		$caseRow = $mDB->fetchRow(2);
+
+		if ($caseRow) {
+			$case_id = $caseRow['case_id'];
+			$Qry = "SELECT building, actual_completion_date
+					FROM overview_building
+					WHERE case_id = '$case_id'
+					ORDER BY building";
+			$mDB->query($Qry);
+
+			$missingBuildings = array();
+			$buildingCount = 0;
+			while ($buildingRow = $mDB->fetchRow(2)) {
+				$buildingCount++;
+				if (empty($buildingRow['actual_completion_date']) || $buildingRow['actual_completion_date'] == '0000-00-00') {
+					$missingBuildings[] = empty($buildingRow['building']) ? '（未設定棟別）' : $buildingRow['building'];
+				}
+			}
+
+			if ($buildingCount == 0 || count($missingBuildings) > 0) {
+				$mDB->remove();
+				if ($buildingCount == 0) {
+					$message = "目前無法將案件狀態設為「已完工」。\n\n尚無任何棟別的「實際完成日」資料。\n\n請至「工程概況管理 → 預計工程人力」建立棟別並補填實際完成日後，再重新存檔。";
+				} else {
+					$message = "目前無法將案件狀態設為「已完工」。\n\n下列棟別尚未填寫「實際完成日」：" . implode('、', $missingBuildings) . "。\n\n請至「工程概況管理 → 預計工程人力」補填各棟別的實際完成日後，再重新存檔。";
+				}
+				$objResponse->script("alert(" . json_encode($message) . ");");
+				return $objResponse;
+			}
+		}
+
+		$mDB->remove();
+	}
 	
 	SaveValue($aFormValues);
 	
